@@ -14,7 +14,162 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      event_announcements: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          published_at: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          published_at?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          published_at?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      event_profiles: {
+        Row: {
+          created_at: string
+          experience_level: string
+          full_name: string
+          id: string
+          institution: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          experience_level: string
+          full_name: string
+          id: string
+          institution: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          experience_level?: string
+          full_name?: string
+          id?: string
+          institution?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      event_registrations: {
+        Row: {
+          confirmed_at: string | null
+          created_at: string
+          email: string
+          experience_level: string
+          full_name: string
+          id: string
+          institution: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          confirmed_at?: string | null
+          created_at?: string
+          email: string
+          experience_level: string
+          full_name: string
+          id?: string
+          institution: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          confirmed_at?: string | null
+          created_at?: string
+          email?: string
+          experience_level?: string
+          full_name?: string
+          id?: string
+          institution?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      event_resources: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          resource_url: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          resource_url?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          resource_url?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      event_sessions: {
+        Row: {
+          created_at: string
+          day_number: number
+          description: string
+          event_date: string
+          id: string
+          meeting_url: string | null
+          session_time: string
+          session_type: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          day_number: number
+          description: string
+          event_date: string
+          id?: string
+          meeting_url?: string | null
+          session_time: string
+          session_type: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          day_number?: number
+          description?: string
+          event_date?: string
+          id?: string
+          meeting_url?: string | null
+          session_time?: string
+          session_type?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
