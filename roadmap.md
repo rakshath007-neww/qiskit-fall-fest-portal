@@ -1,0 +1,4 @@
+- [ ] Create event database tables and secure participant-only access
+- [ ] Build the public Qiskit Fall Fest event experience and requested pages
+- [ ] Add email/Google sign-in, registration confirmation, and participant dashboard
+- [ ] Verify public and authenticated flows in the preview
