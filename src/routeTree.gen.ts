@@ -10,17 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FaqsRouteImport } from './routes/faqs'
+import { Route as RegistrationRouteImport } from './routes/registration'
 import { Route as ScheduleRouteImport } from './routes/schedule'
 import { Route as SpeakersRouteImport } from './routes/speakers'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as WorkshopsRouteImport } from './routes/workshops'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -36,6 +43,11 @@ const ContactRoute = ContactRouteImport.update({
 const FaqsRoute = FaqsRouteImport.update({
   id: '/faqs',
   path: '/faqs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegistrationRoute = RegistrationRouteImport.update({
+  id: '/registration',
+  path: '/registration',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ScheduleRoute = ScheduleRouteImport.update({
@@ -58,37 +70,49 @@ const WorkshopsRoute = WorkshopsRouteImport.update({
   path: '/workshops',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
+  '/registration': typeof RegistrationRoute
   '/schedule': typeof ScheduleRoute
   '/speakers': typeof SpeakersRoute
   '/team': typeof TeamRoute
   '/workshops': typeof WorkshopsRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
+  '/registration': typeof RegistrationRoute
   '/schedule': typeof ScheduleRoute
   '/speakers': typeof SpeakersRoute
   '/team': typeof TeamRoute
   '/workshops': typeof WorkshopsRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/faqs': typeof FaqsRoute
+  '/registration': typeof RegistrationRoute
   '/schedule': typeof ScheduleRoute
   '/speakers': typeof SpeakersRoute
   '/team': typeof TeamRoute
   '/workshops': typeof WorkshopsRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,37 +121,46 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/faqs'
+    | '/registration'
     | '/schedule'
     | '/speakers'
     | '/team'
     | '/workshops'
+    | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/contact'
     | '/faqs'
+    | '/registration'
     | '/schedule'
     | '/speakers'
     | '/team'
     | '/workshops'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/about'
     | '/contact'
     | '/faqs'
+    | '/registration'
     | '/schedule'
     | '/speakers'
     | '/team'
     | '/workshops'
+    | '/_authenticated/dashboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   FaqsRoute: typeof FaqsRoute
+  RegistrationRoute: typeof RegistrationRoute
   ScheduleRoute: typeof ScheduleRoute
   SpeakersRoute: typeof SpeakersRoute
   TeamRoute: typeof TeamRoute
@@ -141,6 +174,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -162,6 +202,13 @@ declare module '@tanstack/react-router' {
       path: '/faqs'
       fullPath: '/faqs'
       preLoaderRoute: typeof FaqsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/registration': {
+      id: '/registration'
+      path: '/registration'
+      fullPath: '/registration'
+      preLoaderRoute: typeof RegistrationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/schedule': {
@@ -192,14 +239,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkshopsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   FaqsRoute: FaqsRoute,
+  RegistrationRoute: RegistrationRoute,
   ScheduleRoute: ScheduleRoute,
   SpeakersRoute: SpeakersRoute,
   TeamRoute: TeamRoute,
