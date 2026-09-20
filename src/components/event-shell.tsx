@@ -1,10 +1,11 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, X, ArrowUpRight } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import mark from "@/assets/qff-mark.png";
 import { eventDetails } from "@/lib/event-data";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 const navigation = [
   ["About", "/about"],
@@ -17,7 +18,17 @@ const navigation = [
 
 export function EventShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    let active = true;
+    void supabase.auth.getSession().then(({ data }) => {
+      if (active) setSignedIn(Boolean(data.session));
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => setSignedIn(Boolean(session)));
+    return () => { active = false; listener.subscription.unsubscribe(); };
+  }, []);
 
   return (
     <div className="min-h-screen overflow-hidden bg-background font-body text-foreground antialiased">
@@ -44,8 +55,8 @@ export function EventShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button asChild className="hidden rounded-full bg-gradient-to-r from-brand to-accent px-5 text-primary-foreground shadow-lg shadow-brand/20 hover:scale-[1.02] hover:from-brand hover:to-accent sm:inline-flex">
-              <Link to="/registration">Register Now</Link>
+             <Button asChild className="hidden rounded-full bg-gradient-to-r from-brand to-accent px-5 text-primary-foreground shadow-lg shadow-brand/20 hover:scale-[1.02] hover:from-brand hover:to-accent sm:inline-flex">
+               <Link to={signedIn ? "/dashboard" : "/registration"}>{signedIn ? "Participant space" : "Register Now"}</Link>
             </Button>
             <Button variant="ghost" size="icon" className="lg:hidden" aria-label={open ? "Close menu" : "Open menu"} onClick={() => setOpen((value) => !value)}>
               {open ? <X /> : <Menu />}
@@ -61,8 +72,8 @@ export function EventShell({ children }: { children: ReactNode }) {
                   {label}
                 </Link>
               ))}
-              <Button asChild className="mt-2 rounded-full bg-gradient-to-r from-brand to-accent text-primary-foreground">
-                <Link to="/registration" onClick={() => setOpen(false)}>Register Now</Link>
+               <Button asChild className="mt-2 rounded-full bg-gradient-to-r from-brand to-accent text-primary-foreground">
+                 <Link to={signedIn ? "/dashboard" : "/registration"} onClick={() => setOpen(false)}>{signedIn ? "Participant space" : "Register Now"}</Link>
               </Button>
             </div>
           </div>
